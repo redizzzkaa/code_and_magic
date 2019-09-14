@@ -21,51 +21,48 @@
 		eyes: 'EYES',
 		fireball: 'FIREBALL'
 	}
-	
-	var wizards = [];
-	
-	var renderWizards =  function () {
-		let arrObj = {
-			name: window.identify(partsWizard.name) + ' ' + window.identify(partsWizard.surname),
-			coatColor: window.colorize.defaults(partsWizard.coat),
-			eyesColor: window.colorize.defaults(partsWizard.eyes)
-		}
-		return arrObj;
-	}
-	
-	for (var i = 0; i < 4; i++) {
-		wizards[i] = renderWizards();
-	}
-	
+
 	var renderWizard = function (wizard) {
 		var wizardElement = similarWizardTemplate.cloneNode(true);
 	
 		wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-		wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-		wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+		wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+		wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 	
 		return wizardElement;
 	};
+
+	var successHendler = function (wizards) {
+		var fragment = document.createDocumentFragment();
 	
-	var fragment = document.createDocumentFragment();
+		for (var i = 0; i < 4; i++) {
+			fragment.appendChild(renderWizard(wizards[i]));
+		};
+		
+		setupSimilarList.appendChild(fragment);
+
+		setup.querySelector('.setup-similar').classList.remove('hidden');
+	}
+
+	var errorHendler = function (errorMessage) {
+		var node = document.createElement('div');
+		node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; position: absolute; left: 0; right: 0; font-size: 30px;'
 	
-	for (var i = 0; i < wizards.length; i++) {
-		fragment.appendChild(renderWizard(wizards[i]));
-	};
-	
-	setupSimilarList.appendChild(fragment);
-	setup.querySelector('.setup-similar').classList.remove('hidden');
-	
+		node.textContent = errorMessage;
+		document.body.insertAdjacentElement('afterbegin', node);
+	}
+
+	window.load(successHendler, errorHendler)
+	/*
 	window.colorize.changes(wizardCoat, partsWizard.coat);
 	window.colorize.changes(wizardEyes, partsWizard.eyes);
 	window.colorize.changes(fireball, partsWizard.fireball);
-	
+	*/
 	// когда курсор в поле userName при нажитии на esc форма не закрывается, надо додлеать, тк постоянных не в этом файле
 	userNameInput.addEventListener('keydown', function (evt) {
 		focusUserNameInput = (evt.keyCode === ESC_KEYCODE)? true : false;
 	});
-
-	var form = document.querySelector('.setup-wizard-form');
+	var form = setup.querySelector('.setup-wizard-form');
 	form.addEventListener('submit', function (evt) {
 		window.upload(new FormData(form), function (response) {
 			setup.classList.add('hidden')

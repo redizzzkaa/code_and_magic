@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    var URL = 'https://js.dump.academy/code-and-magick/data';
+    var URL = 'https://js.dump.academy/code-and-magick';
 
     window.upload = function (data, onSuccess) {
         var xhr = new XMLHttpRequest();
@@ -11,8 +11,8 @@
             onSuccess(xhr.response)
         })
 
-        xhr.open('POST', URL);
-        xhr.send(data);
+        xhr.open('POST', URL); // открыть запрос
+        xhr.send(data); // отправить запрос
     }
 
-})
+})();
