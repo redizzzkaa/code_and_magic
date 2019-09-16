@@ -32,7 +32,7 @@
 		return wizardElement;
 	};
 
-	var successHendler = function (wizards) {
+	var successHandler = function (wizards) {
 		var fragment = document.createDocumentFragment();
 	
 		for (var i = 0; i < 4; i++) {
@@ -44,7 +44,7 @@
 		setup.querySelector('.setup-similar').classList.remove('hidden');
 	}
 
-	var errorHendler = function (errorMessage) {
+	var errorHandler = function (errorMessage) {
 		var node = document.createElement('div');
 		node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; position: absolute; left: 0; right: 0; font-size: 30px;'
 	
@@ -52,7 +52,7 @@
 		document.body.insertAdjacentElement('afterbegin', node);
 	}
 
-	window.load(successHendler, errorHendler)
+	window.backend.load(successHandler, errorHandler)
 	/*
 	window.colorize.changes(wizardCoat, partsWizard.coat);
 	window.colorize.changes(wizardEyes, partsWizard.eyes);
@@ -62,11 +62,15 @@
 	userNameInput.addEventListener('keydown', function (evt) {
 		focusUserNameInput = (evt.keyCode === ESC_KEYCODE)? true : false;
 	});
+
 	var form = setup.querySelector('.setup-wizard-form');
+
+
+
 	form.addEventListener('submit', function (evt) {
-		window.upload(new FormData(form), function (response) {
+		window.backend.save(new FormData(form), function (response) {
 			setup.classList.add('hidden')
-		})
+		}, errorHandler)
 		evt.preventDefault();
 	})
 })();
